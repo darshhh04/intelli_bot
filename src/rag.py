@@ -100,5 +100,5 @@ understand what the question is really asking if it's a follow-up."""
 
 
 if __name__ == "__main__":
-    print(ask("What is IntelliBot's tech stack?"))
-    print(ask("What about the evaluation framework specifically?"))
+    print(ask("What is IntelliBot's tech stack?", history=[]))
+    print(ask("What about the evaluation framework specifically?", history=[]))
