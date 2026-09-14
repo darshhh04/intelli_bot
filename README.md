@@ -32,8 +32,8 @@ Streamlit chat UI (session-based conversation memory)
 
 | Component | Technology |
 |---|---|
-| Language | Python 3.11+ |
-| LLM | Gemini 2.5 Flash |
+| Language | Python 3.13+ |
+| LLM | Gemini 3.5 Flash |
 | Embeddings | SentenceTransformers (all-MiniLM-L6-v2) |
 | Vector DB | ChromaDB (persistent, cosine similarity) |
 | Document Parsing | PyMuPDF (fitz) |
