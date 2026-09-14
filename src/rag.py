@@ -5,6 +5,34 @@ from src.vector_store import search
 
 client = genai.Client(api_key=GEMINI_API_KEY)
 
+CANNED_RESPONSES = {
+    "greeting": {
+        "triggers": {"hi", "hello", "hey", "hii", "yo", "sup", "hola"},
+        "response": "Hello! I'm IntelliBot. Ask me anything about the uploaded documents.",
+    },
+    "goodbye": {
+        "triggers": {"bye", "goodbye", "see you", "cya", "exit", "quit"},
+        "response": "Goodbye! Feel free to come back if you have more questions about the documents.",
+    },
+    "thanks": {
+        "triggers": {"thanks", "thank you", "thx", "ty", "appreciate it"},
+        "response": "You're welcome! Let me know if you need anything else.",
+    },
+    "acknowledgement": {
+        "triggers": {"ok", "okay", "cool", "nice", "got it", "alright", "k"},
+        "response": "👍 Let me know if you have any more questions.",
+    },
+}
+
+
+def match_canned_response(query: str) -> str | None:
+   
+    cleaned = query.strip().lower().rstrip("!.?")
+    for intent in CANNED_RESPONSES.values():
+        if cleaned in intent["triggers"]:
+            return intent["response"]
+    return None
+
 SYSTEM_PROMPT = """You are IntelliBot, a helpful assistant that answers questions
 using ONLY the provided context from the user's documents.
 
@@ -14,10 +42,6 @@ Rules:
 - Use the conversation history to understand follow-up questions (e.g. "what about X" refers back to the prior topic).
 - Keep answers concise and cite which document the info came from when possible.
 """
-
-
-chat_history = []
-
 
 def build_context(chunks: list[str], sources: list[str]) -> str:
     parts = []
@@ -34,13 +58,18 @@ def build_history_text(history: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def ask(query: str, top_k: int = 3) -> str:
+def ask(query: str, history: list[dict], top_k: int = 3) -> str:
+
+    canned = match_canned_response(query)
+    if canned:
+        return canned
+   
     results = search(query, top_k=top_k)
     chunks = results["documents"][0]
     sources = [meta["source"] for meta in results["metadatas"][0]]
     context = build_context(chunks, sources)
 
-    history_text = build_history_text(chat_history)
+    history_text = build_history_text(history)
 
     user_prompt = f"""Conversation so far:
 {history_text}
@@ -62,19 +91,7 @@ understand what the question is really asking if it's a follow-up."""
         ),
     )
 
-    answer = response.text
-
-
-    chat_history.append({"role": "user", "content": query})
-    chat_history.append({"role": "assistant", "content": answer})
-
-    return answer
-
-
-def clear_history():
-
-    chat_history.clear()
-
+    return response.text
 
 
 
