@@ -47,7 +47,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("IntelliBot")
+st.title("Darshan's IntelliBot")
 st.caption("Ask questions about your uploaded documents.")
 
 if "history" not in st.session_state:
