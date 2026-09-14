@@ -2,11 +2,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 def chunk_text(text: str, chunk_size: int = 500, chunk_overlap: int = 50) -> list[str]:
-    """
-    Split one document's text into overlapping chunks.
-    chunk_size=500 chars is a reasonable default — small enough for
-    precise retrieval, big enough to keep a full idea together.
-    """
+   
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
