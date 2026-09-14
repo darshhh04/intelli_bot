@@ -48,7 +48,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("Darshan's IntelliBot")
-st.caption("Ask questions about your uploaded documents.")
+st.caption("Ask questions about your uploaded documents. (Currently CODE-A-NOVA AI Intership Month 1 assignment 2 documents is added in knowledge base for Testing!)")
 
 if "history" not in st.session_state:
     st.session_state.history = []
